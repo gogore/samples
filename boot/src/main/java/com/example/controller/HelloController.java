@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 
 @Controller
 public class HelloController {
-	@RequestMapping
+	@RequestMapping("home")
 	public String home(Model model) {
 		model.addAttribute("title", "spring boot demo");
 		model.addAttribute("time", "today");
