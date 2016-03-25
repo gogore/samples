@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+
+<project name="MyProject" default="dist" basedir=".">
+    <description>
+        my jenkins build script
+    </description>
+    <!-- set global properties for this build -->
+    <property name="web" location="web" />
+    <property name="build.home" location="build" />
+    <property name="dist" location="D:\Developer\tomcat\apache-tomcat-7.0.64\webapps" />
+
+
+    <target name="init" depends="clean">
+        <!-- Create the time stamp -->
+        <tstamp />
+        <!-- Create the build directory structure used by compile -->
+        <mkdir dir="${build.home}" />
+    </target>
+    <target name="compile" depends="init" description="compile the source">
+        <copy todir="${build.home}">
+            <fileset dir="${web}">
+                <exclude name="WEB-INF/classes/**"/>
+                <exclude name="nxsrc/**"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="dist" depends="compile" description="generate the distribution">
+        <war warfile="${dist}\ui.war">
+            <fileset dir="${build.home}"/>
+        </war>
+    </target>
+
+    <target name="clean" description="clean up">
+        <!-- Delete the ${build} and ${dist} directory trees -->
+        <delete dir="${build.home}" />
+    </target>
+</project>
+
