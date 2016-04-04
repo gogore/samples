@@ -11,7 +11,7 @@
     <property name="web" location="web" />
     <property name="build.home" location="build" />
     <property name="build.class" location="${build.home}\WEB-INF\classes" />
-    <property name="dist" location="D:\Developer\tomcat\apache-tomcat-7.0.64\webapps" />
+    <property name="dist" location="D:\Developer\tomcat\apache-tomcat-7.0.64\jhWebapps\com" />
 
 
     <target name="init" depends="clean">
