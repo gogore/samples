@@ -4,6 +4,7 @@
     <description>
         my jenkins build script
     </description>
+
     <!-- set global properties for this build -->
     <property name="classpath" value="%JAVA_HOME%/lib/tools.jar;D:\Developer\tomcat\apache-tomcat-7.0.64\lib\servlet-api.jar"/>
     <property name="src" location="src" />
@@ -12,7 +13,13 @@
     <property name="build.home" location="build" />
     <property name="build.class" location="${build.home}\WEB-INF\classes" />
     <property name="dist" location="D:\Developer\tomcat\apache-tomcat-7.0.64\jhWebapps\com" />
+	<property name="findbugs.home" value="D:\Developer\findbugs\findbugs-3.0.1" />
 
+	<!--findbugs -->
+	<path id="findbugs.classpath">
+        <pathelement location="${findbugs.home}\lib\findbugs-ant.jar" />
+    </path>
+	<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpathref="findbugs.classpath"/>
 
     <target name="init" depends="clean">
         <!-- Create the time stamp -->
@@ -52,16 +59,29 @@
             </fileset>
         </copy>
     </target>
+	<target name="findbugs" depends = "compile">
+        <findbugs home="${findbugs.home}"
+                  output="xml:withMessages"
+                  outputFile="report\findbugs.xml"
+        	      jvmargs="-Dfile.encoding=UTF-8">
+            <sourcePath path="${src}" />
+            <class location="${build.class}" />
+        </findbugs>
+    </target>
 
-    <target name="dist" depends="compile" description="generate the distribution">
+    <target name="dist" depends="findbugs" description="generate the distribution">
         <war warfile="${dist}\com.war">
             <fileset dir="${build.home}"/>
         </war>
     </target>
 
+
+
     <target name="clean" description="clean up">
         <!-- Delete the ${build} and ${dist} directory trees -->
         <delete dir="${build.home}" />
     </target>
+
+
 </project>
 
